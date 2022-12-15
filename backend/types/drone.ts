@@ -17,3 +17,12 @@ export interface DroneData {
     positionX: Data,
     altitude: Data
 }
+
+export interface PilotInfo {
+    pilotId: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+    createdDt: Date,
+    email: string
+}
