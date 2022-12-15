@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+  backend:
+    build: ./backend
+    ports:
+      - 3000:3000
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
