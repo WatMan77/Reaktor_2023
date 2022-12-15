@@ -1,8 +1,8 @@
-import express from 'express';
-import { drones } from './drones';
+import express from 'express'
+import { drones } from './drones'
 
-const routes = express.Router();
+const routes = express.Router()
 
-routes.use(drones);
+routes.use(drones)
 
-export { routes };
+export { routes }
