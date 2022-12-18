@@ -1,4 +1,4 @@
-import { DroneData, PilotInfo } from '../types/drone'
+import { DroneData, PilotInfo } from '../../types'
 import { redisClient } from '../db/db'
 import parser from 'xml-js'
 import { Server } from 'socket.io'
@@ -28,57 +28,49 @@ const calculateDistance = (drone: DroneData): number => {
   return distance / 1000
 }
 
-const emitDroneData = async (io: Server): Promise<void> => {
+const emitPilotInfo = async (io: Server): Promise<void> => {
   const keys = await redisClient.keys('*')
-  console.log('Keys?', keys)
 
-  const pilots: string[] = []
+  const pilots: PilotInfo[] = []
 
   for (const key of keys) {
     const pilot = await redisClient.get(key)
-    console.log('Pilot in emitDroneData?')
-    console.log(pilot)
     if (pilot !== null) {
-      pilots.push(pilot)
+      pilots.push(JSON.parse(pilot))
     }
   }
   io.emit('pilotInfo', pilots)
 }
 
 const updateDroneData = async (io: Server): Promise<void> => {
+  if (!redisClient.isReady) {
+    await redisClient.connect()
+  }
   const droneData = await fetchDroneData()
   const violatingDrones: DroneData[] = []
   droneData.forEach(d => {
     const distance = calculateDistance(d)
     if (distance <= 100) {
-      console.log('VIOLATING!')
-      console.log(distance)
+      d.distanceToNest = distance
+      console.log('Pushing', d)
       violatingDrones.push(d)
     }
   })
 
   for (const drone of violatingDrones) {
     const response = await fetch('https://assignments.reaktor.com/birdnest/pilots/' + drone.serialNumber._text)
-    if (response.status === 404) {
-      return
-    }
-    if (!redisClient.isReady) {
-      await redisClient.connect()
-    }
-    // Save the information in text and save it in the Redis cache
-    const text = await response.text()
-    const pilotInfo: PilotInfo = JSON.parse(text)
-    try {
-      console.log('Saving ' + pilotInfo.pilotId)
-      // const s = JSON.stringify(pilotInfo)
-      // console.log('Saving object')
-      // console.log(s)
-      await redisClient.setEx(pilotInfo.pilotId, 600, text)
-    } catch (e) {
-      console.log('Could not save data in redis', e)
+    // There might be an error 404 or similar. Making sure we don't
+    // try to access invalid data
+    if (response.status === 200) {
+      // Save the information in text and save it in the Redis cache
+      const text = await response.text()
+      const pilotInfo: PilotInfo = JSON.parse(text)
+      pilotInfo.distanceToNest = drone.distanceToNest
+      await redisClient.setEx(pilotInfo.pilotId, 600, JSON.stringify(pilotInfo))
     }
   }
-  await emitDroneData(io)
+  // Send the violators to the client(s) using a socket
+  await emitPilotInfo(io)
 }
 
 export default updateDroneData

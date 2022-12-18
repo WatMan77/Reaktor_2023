@@ -16,6 +16,7 @@ export interface DroneData {
   positionY: Data
   positionX: Data
   altitude: Data
+  distanceToNest?: number
 }
 
 export interface PilotInfo {
@@ -25,4 +26,5 @@ export interface PilotInfo {
   phoneNumber: string
   createdDt: Date
   email: string
+  distanceToNest?: number
 }
