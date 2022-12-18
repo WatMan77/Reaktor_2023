@@ -4,6 +4,7 @@ import updateDroneData from './helper/drone_helper'
 // import * as xmlparser from "express-xml-bodyparser";
 import xmlparser from 'express-xml-bodyparser'
 // import cors from 'cors'
+import { Server } from 'socket.io'
 const app = express()
 app.use(express.json())
 app.use(xmlparser())
@@ -17,11 +18,18 @@ app.get('/ping', (_req, res) => {
   res.send('pong')
 })
 
-setInterval(() => {
-  console.log('INTERVAL UPDATE!')
-  void updateDroneData()
-}, 2000)
-
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+console.log(server)
+
+const io = new Server(server)
+
+io.on('connection', (socket) => {
+  socket.emit('hello', 'world')
+})
+
+setInterval(() => {
+  console.log('INTERVAL UPDATE!')
+  void updateDroneData(io)
+}, 2000)

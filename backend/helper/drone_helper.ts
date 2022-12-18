@@ -1,6 +1,7 @@
 import { DroneData, PilotInfo } from '../types/drone'
 import { redisClient } from '../db/db'
 import parser from 'xml-js'
+import { Server } from 'socket.io'
 
 // Get the drone data and parse the XML to an Object
 const fetchDroneData = async (): Promise<DroneData[]> => {
@@ -27,7 +28,24 @@ const calculateDistance = (drone: DroneData): number => {
   return distance / 1000
 }
 
-const updateDroneData = async (): Promise<void> => {
+const emitDroneData = async (io: Server): Promise<void> => {
+  const keys = await redisClient.keys('*')
+  console.log('Keys?', keys)
+
+  const pilots: string[] = []
+
+  for (const key of keys) {
+    const pilot = await redisClient.get(key)
+    console.log('Pilot in emitDroneData?')
+    console.log(pilot)
+    if (pilot !== null) {
+      pilots.push(pilot)
+    }
+  }
+  io.emit('pilotInfo', pilots)
+}
+
+const updateDroneData = async (io: Server): Promise<void> => {
   const droneData = await fetchDroneData()
   const violatingDrones: DroneData[] = []
   droneData.forEach(d => {
@@ -52,14 +70,15 @@ const updateDroneData = async (): Promise<void> => {
     const pilotInfo: PilotInfo = JSON.parse(text)
     try {
       console.log('Saving ' + pilotInfo.pilotId)
-      const s = JSON.stringify(pilotInfo)
-      console.log('Saving object')
-      console.log(s)
+      // const s = JSON.stringify(pilotInfo)
+      // console.log('Saving object')
+      // console.log(s)
       await redisClient.setEx(pilotInfo.pilotId, 600, text)
     } catch (e) {
       console.log('Could not save data in redis', e)
     }
   }
+  await emitDroneData(io)
 }
 
 export default updateDroneData
