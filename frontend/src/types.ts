@@ -33,5 +33,5 @@ export interface PilotInfo {
   createdDt: string | Date
   email: string
   distanceToNest?: number
-  timestamp?: string
+  timestamp: string
 }

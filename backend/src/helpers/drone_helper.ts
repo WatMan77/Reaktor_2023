@@ -12,7 +12,6 @@ const fetchDroneData = async (): Promise<DroneData> => {
 }
 
 // Calculates the distance of the drone inside the zone
-                                  //CHANGED!
 const calculateDistance = (drone: Drone): number => {
   // The distances are constants
   // Origin at 250000, 250000
@@ -59,7 +58,6 @@ const updateDroneData = async (io: Server): Promise<void> => {
   })
 
   for (const drone of violatingDrones) {
-    // The fetch might fail from time to time
     try {
       const response = await fetch('https://assignments.reaktor.com/birdnest/pilots/' + drone.serialNumber._text)
       // There might be an error 404 or similar. Making sure we don't

@@ -1,11 +1,9 @@
 import express from 'express'
 import updateDroneData from './helpers/drone_helper'
-import xmlparser from 'express-xml-bodyparser'
 import cors from 'cors'
 import { Server } from 'socket.io'
 const app = express()
 app.use(express.json())
-app.use(xmlparser())
 app.use(cors())
 
 const PORT = process.env.PORT ?? 8080
