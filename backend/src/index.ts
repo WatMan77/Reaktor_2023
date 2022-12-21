@@ -1,6 +1,5 @@
 import express from 'express'
-import updateDroneData from './helper/drone_helper'
-// import * as xmlparser from "express-xml-bodyparser";
+import updateDroneData from './helpers/drone_helper'
 import xmlparser from 'express-xml-bodyparser'
 import cors from 'cors'
 import { Server } from 'socket.io'

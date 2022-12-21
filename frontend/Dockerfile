@@ -4,6 +4,6 @@ COPY . .
 
 EXPOSE 3000
 
-RUN apt update && npm install
+RUN apt update && npm install && npm run build && npm install -g serve
 
-CMD ["npm", "run", "start"]
+CMD ["serve", "-s", "build"]

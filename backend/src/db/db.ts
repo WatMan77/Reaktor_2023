@@ -11,9 +11,4 @@ redisClient.on('error', (e) => {
   console.error(e)
 })
 
-// Wish I knew how to make top level
-console.log('What about redis?')
-console.log(redisClient.isReady)
-console.log(redisClient.isOpen)
-
 export { redisClient }
