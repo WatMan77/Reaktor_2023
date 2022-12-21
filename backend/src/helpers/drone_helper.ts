@@ -28,6 +28,7 @@ const calculateDistance = (drone: Drone): number => {
   return distance / 1000
 }
 
+// Emit the drone data to all clients
 const emitPilotInfo = async (io: Server): Promise<void> => {
   const keys = await redisClient.keys('*')
 
@@ -35,11 +36,21 @@ const emitPilotInfo = async (io: Server): Promise<void> => {
 
   for (const key of keys) {
     const pilot = await redisClient.get(key)
+    // There is a very small chance that the data is null IF
+    // we just hit the expiry time
     if (pilot !== null) {
       pilots.push(JSON.parse(pilot))
     }
   }
   io.emit('pilotInfo', pilots)
+}
+
+// If the pilot data is already in Redis, update the timestamp and insert the smallest distance
+const updatePilotInRedis = async (drone: Drone, redisPilotData: string): Promise<void> => {
+  let pilotData: PilotInfo = JSON.parse(redisPilotData)
+  pilotData.distanceToNest = Math.min(pilotData.distanceToNest!, drone.distanceToNest!)
+  pilotData.timestamp = drone.timestamp
+  await redisClient.setEx(drone.serialNumber._text, 600, JSON.stringify(pilotData))
 }
 
 const updateDroneData = async (io: Server): Promise<void> => {
@@ -58,20 +69,30 @@ const updateDroneData = async (io: Server): Promise<void> => {
   })
 
   for (const drone of violatingDrones) {
-    try {
-      const response = await fetch('https://assignments.reaktor.com/birdnest/pilots/' + drone.serialNumber._text)
-      // There might be an error 404 or similar. Making sure we don't
-      // try to access invalid data
-      if (response.status === 200) {
-        // Save the information in text and save it in the Redis cache
-        const text = await response.text()
-        const pilotInfo: PilotInfo = JSON.parse(text)
-        pilotInfo.distanceToNest = drone.distanceToNest
-        pilotInfo.timestamp = drone.timestamp
-        await redisClient.setEx(pilotInfo.pilotId, 600, JSON.stringify(pilotInfo))
+    // If the drones data is already in the cache, compare the distances and
+    // save the closest distance
+    const redisPilotData = await redisClient.get(drone.serialNumber._text)
+    if (redisPilotData !== null) {
+      // Pilot is already in cache. Update timestamp and distance
+      await updatePilotInRedis(drone, redisPilotData)
+
+    } else {
+      // Pilot is not in cache. Need to fetch the data and create a new instance.
+      try {
+        const response = await fetch('https://assignments.reaktor.com/birdnest/pilots/' + drone.serialNumber._text)
+        // There might be an error 404 or similar. Making sure we don't
+        // try to access invalid data
+        if (response.status === 200) {
+          // Save the information in text and save it in the Redis cache
+          const text = await response.text()
+          const pilotInfo: PilotInfo = JSON.parse(text)
+          pilotInfo.distanceToNest = drone.distanceToNest
+          pilotInfo.timestamp = drone.timestamp
+          await redisClient.setEx(drone.serialNumber._text, 600, JSON.stringify(pilotInfo))
+        }
+      } catch (e) {
+        console.log(e)
       }
-    } catch (e) {
-      console.log(e)
     }
   }
   // Send the violators to the client(s) using a socket

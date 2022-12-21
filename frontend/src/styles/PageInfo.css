@@ -1,4 +1,4 @@
-
+/* Make the overall text more pleasing on the landing page */
 body {
     font-family: 'Crimson Pro', serif;
     font-size: 18px;
@@ -10,6 +10,4 @@ body {
     margin-left: 6em;
     margin-right: 3em;
     width: 70%;
-
-    
 }

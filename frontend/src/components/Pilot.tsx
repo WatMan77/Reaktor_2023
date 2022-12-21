@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { PilotInfo } from '../types'
-import '../styles/PilotCard.css'
+import '../styles/PilotTable.css'
 
 let socket: Socket
 
@@ -22,6 +22,7 @@ const Pilot = (): JSX.Element => {
       setPilots(x.sort((a, b) => a.firstName < b.firstName ? -1 : 0))
     })
 
+    // Stop listening to the socket when closeing the page / when componen is not rendered anymore
     return () => {
       socket.removeAllListeners()
     }
@@ -32,8 +33,8 @@ const Pilot = (): JSX.Element => {
         <tr>
           <th>Name</th>
           <th>Pilot ID</th>
-          <th>Distance</th>
-          <th>Time seen</th>
+          <th>Closest distance</th>
+          <th>Last seen</th>
           <th>Phone Number</th>
           <th>Email</th>
         </tr>
