@@ -1,0 +1,15 @@
+
+body {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.page-info {
+    margin-left: 6em;
+    margin-right: 3em;
+    width: 70%;
+
+    
+}
