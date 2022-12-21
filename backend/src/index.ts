@@ -3,7 +3,6 @@ import updateDroneData from './helper/drone_helper'
 // import * as xmlparser from "express-xml-bodyparser";
 import xmlparser from 'express-xml-bodyparser'
 import cors from 'cors'
-require('express-async-errors')
 import { Server } from 'socket.io'
 const app = express()
 app.use(express.json())

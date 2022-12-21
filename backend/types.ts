@@ -5,7 +5,7 @@ interface Data {
 }
 
 // Interface for the Drone data as "deviceInformation" and others are not needed
-export interface DroneData {
+export interface Drone {
   serialNumber: Data
   model: Data
   manufacturer: Data
@@ -17,6 +17,12 @@ export interface DroneData {
   positionX: Data
   altitude: Data
   distanceToNest?: number
+  timestamp?: string
+}
+
+export interface DroneData {
+  drone: Drone[]
+  _attributes: { snapshotTimestamp: string }
 }
 
 export interface PilotInfo {
@@ -24,7 +30,8 @@ export interface PilotInfo {
   firstName: string
   lastName: string
   phoneNumber: string
-  createdDt: Date
+  createdDt: string | Date
   email: string
   distanceToNest?: number
+  timestamp?: string
 }
