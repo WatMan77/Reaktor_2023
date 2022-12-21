@@ -1,9 +1,11 @@
-FROM node:19-bullseye
+FROM node:19-alpine
+
+WORKDIR /usr/app
 
 COPY . .
 
 EXPOSE 8080
 
-RUN apt update && npm install
+RUN apk update && npm install && npm run tsc && cd build && ls
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
