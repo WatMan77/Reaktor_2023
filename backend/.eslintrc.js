@@ -4,7 +4,8 @@ module.exports = {
     es2021: true
   },
   extends: [
-    'standard-with-typescript'
+    'standard-with-typescript',
+    '@typescipt-eslint'
   ],
   overrides: [
   ],
@@ -14,7 +15,12 @@ module.exports = {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname
   },
+  plugins: [
+    '@typescript-eslint'
+  ],
+
   rules: {
-    'no-console': 'warn'
+    'no-console': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn'
   }
 }

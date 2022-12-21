@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 import { PilotInfo } from '../types'
+import '../styles/PilotCard.css'
 
 let socket: Socket
 
@@ -17,15 +18,28 @@ const Pilot = (): JSX.Element => {
     }
   }, [])
   return (
-    <div>
-      {pilots.map((p) =>
-        <div key={p.pilotId}>
-          <h1>
-            {p.firstName} {p.lastName} {p.distanceToNest}
-          </h1>
-        </div>
-      )}
-    </div>
+    <table className='pilots-table'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Pilot ID</th>
+          <th>Distance</th>
+          <th>Phone Number</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {pilots.map((p) =>
+          <tr key={p.pilotId} className='pilot'>
+            <td>{p.firstName} {p.lastName}</td>
+            <td>{p.pilotId}</td>
+            <td>{p.distanceToNest?.toFixed(0)} meters</td>
+            <td>{p.phoneNumber}</td>
+            <td>{p.email}</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
   )
 }
 

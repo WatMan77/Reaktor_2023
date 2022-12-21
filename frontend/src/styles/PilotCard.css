@@ -1,0 +1,55 @@
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+body{
+    font-family: Helvetica;
+    -webkit-font-smoothing: antialiased;
+    background: rgba( 71, 147, 227, 1);
+}
+
+/* Table Styles */
+
+.table-wrapper{
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+}
+
+.pilots-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    background-color: white;
+}
+
+.pilots-table td, .pilots-table th {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+/* Create light borders between the different data */
+.pilots-table td {
+    border-right: 1px solid #dbd7d7;
+    font-size: 15px;
+}
+
+/* The header text of odd numbered columns (1, 3, 5....) */
+.pilots-table thead th {
+    color: #ffffff;
+    background: #4FC3A1;
+}
+
+/* Every odd header text and background */
+.pilots-table thead th:nth-child(odd) {
+    color: #ffffff;
+    background: #324960;
+}
+
+/* Background of every second data row */
+.pilots-table tr:nth-child(even) {
+    background: #F8F8F8;
+}
