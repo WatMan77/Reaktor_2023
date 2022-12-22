@@ -8,7 +8,12 @@
     "tsc": "tsc",
     "dev": "ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts",
-    "start": "node build/src/index.js"
+    "build:ui": "rm -rf build_frontend && cd ../frontend && npm run build && cp -r build ../backend/build_frontend",
+    "build:full": "npm run tsc && npm run build:ui",
+    "close:redis": "service redis-server stop",
+    "start:backend": "node build_backend/src/index.js",
+    "start:frontend": "serve -s build_frontend/",
+    "start": "npm run build:full && npm run start:frontend & npm run start:backend & redis-server"
   },
   "author": "",
   "license": "ISC",

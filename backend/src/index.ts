@@ -1,4 +1,5 @@
 import express from 'express'
+import 'express-async-errors'
 import updateDroneData from './helpers/drone_helper'
 import cors from 'cors'
 import { Server } from 'socket.io'

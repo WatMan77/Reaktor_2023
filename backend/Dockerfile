@@ -6,6 +6,6 @@ COPY . .
 
 EXPOSE 8080
 
-RUN apk update && npm install && npm run tsc && cd build && ls
+RUN apk update && npm install && npm run tsc
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:backend"]
