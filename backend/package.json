@@ -13,7 +13,7 @@
     "close:redis": "service redis-server stop",
     "start:backend": "node build_backend/src/index.js",
     "start:frontend": "serve -s build_frontend/",
-    "start": "npm run build:full && npm run start:frontend & npm run start:backend & redis-server"
+    "start": "npm run start:frontend & npm run start:backend & redis-server"
   },
   "author": "",
   "license": "ISC",

@@ -2,5 +2,8 @@
   "dependencies": {
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4"
+  },
+  "scripts": {
+    "start": "cd backend && npm run build:full && npm run start"
   }
 }
