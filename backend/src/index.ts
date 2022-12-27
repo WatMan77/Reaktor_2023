@@ -6,6 +6,7 @@ import { Server } from 'socket.io'
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build_frontend'))
 
 const PORT = process.env.PORT ?? 8080
 
