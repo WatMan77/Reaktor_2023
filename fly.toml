@@ -1,6 +1,6 @@
-# fly.toml file generated for holy-darkness-4683 on 2022-12-27T13:22:03+02:00
+# fly.toml file generated for crimson-thunder-9580 on 2022-12-27T15:09:10+02:00
 
-app = "holy-darkness-4683"
+app = "crimson-thunder-9580"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
@@ -13,7 +13,7 @@ processes = []
 
 [[services]]
   http_checks = []
-  internal_port = 3000
+  internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
@@ -30,10 +30,6 @@ processes = []
   [[services.ports]]
     handlers = ["tls", "http"]
     port = 443
-  
-  [[service.ports]]
-    port = 8080
-    handlers = ["tls", "http"]
 
   [[services.tcp_checks]]
     grace_period = "1s"

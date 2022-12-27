@@ -17,12 +17,14 @@ const parseTimestamp = (pilot: PilotInfo): string => {
 const Pilot = (): JSX.Element => {
   const [pilots, setPilots] = useState<PilotInfo[]>([])
   useEffect(() => {
-    socket = io('ws://localhost:8080')
+    // Since backend and frontend have the same origin, no specific url needs to be given
+    // to the socket
+    socket = io('/')
     socket.on('pilotInfo', (x: PilotInfo[]) => {
       setPilots(x.sort((a, b) => a.firstName < b.firstName ? -1 : 0))
     })
 
-    // Stop listening to the socket when closeing the page / when componen is not rendered anymore
+    // Stop listening to the socket when closeing the page or when component is not rendered anymore
     return () => {
       socket.removeAllListeners()
     }

@@ -8,16 +8,11 @@ COPY ./package.json .
 
 COPY ./package-lock.json .
 
-RUN echo "HERE IS LS!" && ls
+EXPOSE 8080
 
-EXPOSE 3000
+# There is an argument to be made whether the npm installs and builds should
+# be done inside the container. For now it is easier to just copy the backend
+# which already has the build_frontend and build_backend
+RUN apk update
 
-#RUN apk update && apk add redis \
-#    && cd frontend && npm install && cd ../backend && npm install serve -g \
-#    && npm install
-
-RUN apk update && apk add redis && npm install serve -g
-
-#CMD ["npm", "--prefix", "./backend", "run", "start"]
-
-CMD ["npm", "run", "start"]
+CMD ["npm", "--prefix", "./backend", "run", "start:backend"]
