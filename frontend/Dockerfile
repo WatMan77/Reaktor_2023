@@ -1,3 +1,4 @@
+# This is in case you want to just run the frontend and nothing else
 FROM node:19-alpine
 
 COPY . .

@@ -105,3 +105,4 @@ dist
 
 build_backend
 build_frontend
+dump.rdb
