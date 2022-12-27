@@ -4,6 +4,7 @@
     "semantic-ui-react": "^2.1.4"
   },
   "scripts": {
-    "start": "cd backend && npm run build:full && npm run start"
+    "start": "cd backend && npm run start",
+    "start:frontend": "cd build_frontend && server -s index.js"
   }
 }
