@@ -10,7 +10,6 @@ If they have, their data is saved for 10 minutes inside a Redis cache.
 The client and the server are connected using Sockets (Socket.IO). The backend emits the data from the
 redis cache to the clients updating the client site in real time.
 
-The application can also be found running here: https://crimson-thunder-9580.fly.dev/
 
 # How to run the application locally
 To run the application locally, you can just use docker-compose up which then builds the frontend and backend.
